@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Timestamp Converter — Unix Timestamp to Date Converter Online Free (2026)</title>
+<meta name="description" content="Convert Unix timestamps to human-readable dates and dates to Unix timestamps online for free. Supports seconds, milliseconds, and ISO 8601. 100% browser-based, no upload.">
+<link rel="canonical" href="https://xueboyang1985.github.io/timestamp-converter/">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f8fafc;color:#1a1a1a;min-height:100vh;}
+.container{max-width:800px;margin:0 auto;padding:20px;}
+h1{text-align:center;font-size:28px;margin:20px 0;background:linear-gradient(135deg,#6366f1,#e94560);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.converter{background:white;border-radius:12px;padding:24px;margin:16px 0;box-shadow:0 1px 3px rgba(0,0,0,.08);}
+.converter h2{font-size:16px;margin-bottom:12px;color:#1a1a1a;}
+.converter label{font-size:13px;font-weight:600;color:#475569;display:block;margin-bottom:4px;}
+.converter input,.converter select{padding:10px 12px;border:1px solid #d1d5db;border-radius:8px;font-size:14px;width:100%;outline:none;font-family:monospace;}
+.converter input:focus{border-color:#6366f1;box-shadow:0 0 0 3px rgba(99,102,241,0.1);}
+.converter .row{display:flex;gap:12px;margin-bottom:12px;align-items:end;}
+.converter .row .field{flex:1;}
+.converter .row .field-sm{flex:0 0 140px;}
+.converter .result{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:14px;margin-top:12px;font-family:monospace;font-size:14px;word-break:break-all;min-height:20px;}
+.converter .copy-btn{padding:8px 16px;background:#6366f1;color:white;border:none;border-radius:6px;cursor:pointer;font-weight:600;font-size:13px;}
+.converter .copy-btn:hover{background:#4f46e5;}
+.converter .now-btn{padding:8px 16px;background:#f1f5f9;color:#475569;border:1px solid #d1d5db;border-radius:6px;cursor:pointer;font-size:13px;white-space:nowrap;}
+.converter .now-btn:hover{background:#e2e8f0;}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0;}
+.info-card{background:white;border-radius:10px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,.08);}
+.info-card h3{font-size:14px;margin-bottom:4px;color:#475569;}
+.info-card .val{font-size:18px;font-weight:700;font-family:monospace;color:#1a1a1a;}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:center;}
+.toolbar button{padding:8px 20px;border:none;border-radius:6px;font-size:14px;cursor:pointer;font-weight:600;transition:all 0.15s;}
+.btn-primary{background:#6366f1;color:white;}.btn-primary:hover{background:#4f46e5;}
+.btn-success{background:#10b981;color:white;}.btn-success:hover{background:#059669;}
+.btn-outline{background:white;color:#475569;border:1px solid #d1d5db;}.btn-outline:hover{background:#f1f5f9;}
+.pro-banner{text-align:center;background:linear-gradient(135deg,#eef2ff,#f8fafc);border:2px solid #e0e7ff;border-radius:12px;padding:20px;margin:16px 0;}
+.pro-banner h3{font-size:16px;margin-bottom:6px;color:#4338ca;}
+.pro-banner p{font-size:13px;color:#475569;margin-bottom:10px;}
+.pro-banner .buy-btn{background:#6366f1;color:white;padding:10px 28px;border-radius:8px;text-decoration:none;font-weight:600;display:inline-block;}
+.hidden{display:none;}
+.status-msg{font-size:13px;color:#6366f1;text-align:center;margin-top:8px;min-height:20px;}
+.footer{text-align:center;padding:30px 0;color:#94a3b8;font-size:12px;}
+.footer a{color:#6366f1;text-decoration:none;}
+.cross-promo{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:20px 0;}
+.cross-promo a{background:white;border:1px solid #e2e8f0;border-radius:8px;padding:8px 16px;text-decoration:none;font-size:13px;color:#475569;transition:all 0.15s;}
+.cross-promo a:hover{border-color:#6366f1;color:#6366f1;}
+@media(max-width:600px){.converter .row{flex-direction:column;}.converter .row .field-sm{flex:1;}.info-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>Timestamp Converter</h1>
+<p style="text-align:center;color:#64748b;margin-bottom:20px;">Convert between Unix timestamps and human-readable dates — 100% browser-based, nothing uploaded</p>
+
+<div id="proStatus" class="pro-banner hidden">
+<h3>PRO Unlocked</h3>
+<p>Unlimited timestamp conversions, no limits.</p>
+</div>
+
+<div class="converter">
+<h2>Unix Timestamp → Date</h2>
+<div class="row">
+<div class="field">
+<label for="tsInput">Timestamp</label>
+<input id="tsInput" type="text" placeholder="e.g. 1716969600" value="">
+</div>
+<div class="field-sm">
+<label for="tsUnit">Unit</label>
+<select id="tsUnit">
+<option value="seconds">Seconds</option>
+<option value="milliseconds">Milliseconds</option>
+</select>
+</div>
+<div style="display:flex;gap:8px;align-items:end;padding-bottom:2px;">
+<button class="copy-btn" onclick="tsToDate()">Convert</button>
+<button class="now-btn" onclick="setNow()">Now</button>
+</div>
+</div>
+<label>Result (UTC)</label>
+<div class="result" id="tsResult">—</div>
+<label style="margin-top:8px;">Result (Local)</label>
+<div class="result" id="tsResultLocal">—</div>
+</div>
+
+<div class="converter">
+<h2>Date → Unix Timestamp</h2>
+<div class="row">
+<div class="field">
+<label for="dateInput">Date &amp; Time</label>
+<input id="dateInput" type="datetime-local" step="1">
+</div>
+<div class="field-sm">
+<label for="dateUnit">Output</label>
+<select id="dateUnit">
+<option value="seconds">Seconds</option>
+<option value="milliseconds">Milliseconds</option>
+</select>
+</div>
+<div style="display:flex;gap:8px;align-items:end;padding-bottom:2px;">
+<button class="copy-btn" onclick="dateToTs()">Convert</button>
+</div>
+</div>
+<label>Unix Timestamp</label>
+<div class="result" id="dateResult">—</div>
+</div>
+
+<button class="btn-outline" style="width:100%;margin-bottom:8px;" onclick="copyAll()">Copy All Results</button>
+
+<div class="info-grid">
+<div class="info-card">
+<h3>Current Unix Time</h3>
+<div class="val" id="currentUnix">—</div>
+</div>
+<div class="info-card">
+<h3>Current UTC</h3>
+<div class="val" id="currentUTC" style="font-size:14px;">—</div>
+</div>
+<div class="info-card">
+<h3>Today Start (UTC)</h3>
+<div class="val" id="todayStart">—</div>
+</div>
+<div class="info-card">
+<h3>Year Start (UTC)</h3>
+<div class="val" id="yearStart">—</div>
+</div>
+</div>
+
+<div id="statusMsg" class="status-msg"></div>
+
+<div class="cross-promo">
+<a href="https://xueboyang1985.github.io/url-encoder/">URL Encoder</a>
+<a href="https://xueboyang1985.github.io/html-formatter/">HTML Formatter</a>
+<a href="https://xueboyang1985.github.io/css-minifier/">CSS Minifier</a>
+<a href="https://xueboyang1985.github.io/case-converter/">Case Converter</a>
+<a href="https://xueboyang1985.github.io/json-csv-converter/">JSON Formatter</a>
+<a href="https://xueboyang1985.github.io/base64-encoder/">Base64 Encoder</a>
+<a href="https://xueboyang1985.github.io/markdown-editor/">Markdown Editor</a>
+</div>
+
+<div class="pro-banner">
+<h3>PRO Version — No Limits, 100% Private</h3>
+<p>All tools run entirely in your browser. Your data never leaves your device. PRO removes all restrictions across 21+ tools with one license.</p>
+<a class="buy-btn" href="https://xuebo8.gumroad.com/l/skxcpj" onclick="window.open(this.href,'gumroad','width=600,height=700');return false;">Get Bundle $9.99</a>
+<p style="font-size:12px;color:#94a3b8;margin-top:6px;">&#8226; Lifetime access &#8226; 21+ tools &#8226; 3 devices &#8226; No subscription</p>
+</div>
+
+<div class="footer">
+<p>Free browser tool &bull; No upload &bull; No tracking &bull; <a href="https://xueboyang1985.github.io/free-browser-tools/">More Free Tools</a></p>
+</div>
+</div>
+
+<script>
+let isPRO = false;
+try { isPRO = localStorage.getItem('tc_pro') === 'true'; } catch(e){}
+const PRO_PRODUCT_ID = 'xdlh1FHKAU0E7q3ZRuHPaw==';
+const FREE_LIMIT = 5000;
+
+function updatePROUI() {
+  const banner = document.getElementById('proStatus');
+  if (isPRO) banner.classList.remove('hidden');
+  else banner.classList.add('hidden');
+}
+
+function buyPRO() {
+  if (isPRO) return;
+  window.open('https://xuebo8.gumroad.com/l/skxcpj?product_id=' + PRO_PRODUCT_ID + '&license_key=true', 'gumroad', 'width=600,height=700');
+}
+
+window.addEventListener('message', function(e) {
+  if (e.data && e.data.success && e.data.purchase) {
+    const key = e.data.purchase.license_key;
+    if (key) {
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', 'https://api.gumroad.com/v2/licenses/verify', true);
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      xhr.onload = function() {
+        const r = JSON.parse(xhr.responseText);
+        if (r.success && r.purchase) {
+          isPRO = true;
+          try { localStorage.setItem('tc_pro', 'true'); } catch(e){}
+          updatePROUI();
+          setStatus('PRO activated!');
+        }
+      };
+      xhr.send('product_id=' + encodeURIComponent(PRO_PRODUCT_ID) + '&license_key=' + encodeURIComponent(key));
+    }
+  }
+});
+
+function setStatus(msg) {
+  document.getElementById('statusMsg').textContent = msg;
+  setTimeout(() => { document.getElementById('statusMsg').textContent = ''; }, 3000);
+}
+
+function tsToDate() {
+  const input = document.getElementById('tsInput').value.trim();
+  if (!input) { setStatus('Enter a timestamp'); return; }
+  const unit = document.getElementById('tsUnit').value;
+  let ts = Number(input);
+  if (isNaN(ts)) { setStatus('Invalid timestamp'); return; }
+  if (unit === 'seconds') ts *= 1000;
+  const d = new Date(ts);
+  if (isNaN(d.getTime())) { setStatus('Invalid date'); return; }
+  document.getElementById('tsResult').textContent = d.toISOString().replace('T', ' ').replace('Z', ' UTC');
+  document.getElementById('tsResultLocal').textContent = d.toLocaleString();
+  setStatus('Converted!');
+}
+
+function dateToTs() {
+  const val = document.getElementById('dateInput').value;
+  if (!val) { setStatus('Select a date/time'); return; }
+  const d = new Date(val + 'Z');
+  const unit = document.getElementById('dateUnit').value;
+  let ts = d.getTime();
+  if (unit === 'seconds') ts = Math.floor(ts / 1000);
+  document.getElementById('dateResult').textContent = ts;
+  setStatus('Converted!');
+}
+
+function setNow() {
+  document.getElementById('tsInput').value = Math.floor(Date.now() / 1000);
+  tsToDate();
+}
+
+function copyAll() {
+  const parts = [];
+  const tsR = document.getElementById('tsResult').textContent;
+  const tsL = document.getElementById('tsResultLocal').textContent;
+  const dR = document.getElementById('dateResult').textContent;
+  if (tsR !== '—') parts.push('UTC: ' + tsR);
+  if (tsL !== '—') parts.push('Local: ' + tsL);
+  if (dR !== '—') parts.push('Unix: ' + dR);
+  if (!parts.length) { setStatus('Nothing to copy'); return; }
+  navigator.clipboard.writeText(parts.join('\n')).then(() => setStatus('Copied!')).catch(() => setStatus('Copy failed'));
+}
+
+function updateClock() {
+  const now = new Date();
+  document.getElementById('currentUnix').textContent = Math.floor(now.getTime() / 1000);
+  document.getElementById('currentUTC').textContent = now.toISOString().replace('T', ' ').replace('Z', ' UTC');
+  const todayStart = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
+  document.getElementById('todayStart').textContent = Math.floor(todayStart.getTime() / 1000);
+  const yearStart = new Date(Date.UTC(now.getUTCFullYear(), 0, 1));
+  document.getElementById('yearStart').textContent = Math.floor(yearStart.getTime() / 1000);
+}
+
+updatePROUI();
+updateClock();
+setInterval(updateClock, 1000);
+
+// Default: fill with current time
+document.getElementById('tsInput').value = Math.floor(Date.now() / 1000);
+tsToDate();
+document.getElementById('dateInput').value = new Date().toISOString().slice(0, 19);
+</script>
+</body>
+</html>
